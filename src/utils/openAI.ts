@@ -59,14 +59,7 @@ export const parseOpenAIStream = (rawResponse: Response) => {
   })
 
   const response = new Response(stream, {
-    headers: {
-      'Content-Type': rawResponse.headers.get('Content-Type') || 'text/event-stream',
-      'transfer-encoding': rawResponse.headers.get('transfer-encoding') || 'chunked',
-      'cache-control': rawResponse.headers.get('cache-control') || 'no-cache',
-      'connection': rawResponse.headers.get('connection') || 'keep-alive',
-    },
-    status: rawResponse.status,
-    statusText: rawResponse.statusText,
+    headers: rawResponse.headers,
   })
 
   return response
