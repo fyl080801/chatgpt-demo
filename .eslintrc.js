@@ -27,5 +27,13 @@ module.exports = {
         'prettier/prettier': 'off',
       },
     },
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: '@typescript-eslint/parser',
+      rules: {
+        '@typescript-eslint/space-before-function-paren': 'off',
+        'arrow-parens': 'off',
+      },
+    },
   ],
 }

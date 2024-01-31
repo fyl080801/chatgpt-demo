@@ -18,10 +18,12 @@ export default () => {
   const [controller, setController] = createSignal<AbortController>(null)
   const [isStick, setStick] = createSignal(false)
   const [temperature, setTemperature] = createSignal(0.6)
-  const temperatureSetting = (value: number) => { setTemperature(value) }
+  const temperatureSetting = (value: number) => {
+    setTemperature(value)
+  }
   const maxHistoryMessages = parseInt(import.meta.env.PUBLIC_MAX_HISTORY_MESSAGES || '9')
 
-  createEffect(() => (isStick() && smoothToBottom()))
+  createEffect(() => isStick() && smoothToBottom())
 
   onMount(() => {
     let lastPostion = window.scrollY
@@ -39,8 +41,7 @@ export default () => {
       if (sessionStorage.getItem('systemRoleSettings'))
         setCurrentSystemRoleSettings(sessionStorage.getItem('systemRoleSettings'))
 
-      if (localStorage.getItem('stickToBottom') === 'stick')
-        setStick(true)
+      if (localStorage.getItem('stickToBottom') === 'stick') setStick(true)
     } catch (err) {
       console.error(err)
     }
@@ -57,10 +58,9 @@ export default () => {
     isStick() ? localStorage.setItem('stickToBottom', 'stick') : localStorage.removeItem('stickToBottom')
   }
 
-  const handleButtonClick = async() => {
+  const handleButtonClick = async () => {
     const inputValue = inputRef.value
-    if (!inputValue)
-      return
+    if (!inputValue) return
 
     inputRef.value = ''
     setMessageList([
@@ -74,15 +74,29 @@ export default () => {
     instantToBottom()
   }
 
-  const smoothToBottom = useThrottleFn(() => {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-  }, 300, false, true)
+  const smoothToBottom = useThrottleFn(
+    () => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+    },
+    300,
+    false,
+    true,
+  )
 
   const instantToBottom = () => {
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' })
   }
 
-  const requestWithLatestMessage = async() => {
+  const smooth = async char => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        setCurrentAssistantMessage(currentAssistantMessage() + char)
+        resolve(true)
+      }, 40)
+    })
+  }
+
+  const requestWithLatestMessage = async () => {
     setLoading(true)
     setCurrentAssistantMessage('')
     setCurrentError(null)
@@ -119,8 +133,7 @@ export default () => {
         throw new Error('Request failed')
       }
       const data = response.body
-      if (!data)
-        throw new Error('No data')
+      if (!data) throw new Error('No data')
 
       const reader = data.getReader()
       const decoder = new TextDecoder('utf-8')
@@ -130,11 +143,10 @@ export default () => {
         const { value, done: readerDone } = await reader.read()
         if (value) {
           const char = decoder.decode(value)
-          if (char === '\n' && currentAssistantMessage().endsWith('\n'))
-            continue
+          if (char === '\n' && currentAssistantMessage().endsWith('\n')) continue
 
           if (char)
-            setCurrentAssistantMessage(currentAssistantMessage() + char)
+            for (const idx in char as any) await smooth(char[idx])
 
           isStick() && instantToBottom()
         }
@@ -163,8 +175,7 @@ export default () => {
       setLoading(false)
       setController(null)
       // Disable auto-focus on touch devices
-      if (!('ontouchstart' in document.documentElement || navigator.maxTouchPoints > 0))
-        inputRef.focus()
+      if (!('ontouchstart' in document.documentElement || navigator.maxTouchPoints > 0)) inputRef.focus()
     }
   }
 
@@ -186,15 +197,13 @@ export default () => {
   const retryLastFetch = () => {
     if (messageList().length > 0) {
       const lastMessage = messageList()[messageList().length - 1]
-      if (lastMessage.role === 'assistant')
-        setMessageList(messageList().slice(0, -1))
+      if (lastMessage.role === 'assistant') setMessageList(messageList().slice(0, -1))
       requestWithLatestMessage()
     }
   }
 
   const handleKeydown = (e: KeyboardEvent) => {
-    if (e.isComposing || e.shiftKey)
-      return
+    if (e.isComposing || e.shiftKey) return
 
     if (e.key === 'Enter') {
       e.preventDefault()
@@ -217,24 +226,21 @@ export default () => {
           <MessageItem
             role={message().role}
             message={message().content}
-            showRetry={() => (message().role === 'assistant' && index === messageList().length - 1)}
+            showRetry={() => message().role === 'assistant' && index === messageList().length - 1}
             onRetry={retryLastFetch}
           />
         )}
       </Index>
-      {currentAssistantMessage() && (
-        <MessageItem
-          role="assistant"
-          message={currentAssistantMessage}
-        />
-      )}
-      { currentError() && <ErrorMessageItem data={currentError()} onRetry={retryLastFetch} /> }
+      {currentAssistantMessage() && <MessageItem role="assistant" message={currentAssistantMessage} />}
+      {currentError() && <ErrorMessageItem data={currentError()} onRetry={retryLastFetch} />}
       <Show
         when={!loading()}
         fallback={() => (
           <div class="gen-cb-wrapper">
             <span>AI is thinking...</span>
-            <div class="gen-cb-stop" onClick={stopStreamFetch}>Stop</div>
+            <div class="gen-cb-stop" onClick={stopStreamFetch}>
+              Stop
+            </div>
           </div>
         )}
       >
@@ -261,9 +267,17 @@ export default () => {
           </button>
         </div>
       </Show>
-      <div class="fixed bottom-5 left-5 rounded-md hover:bg-slate/10 w-fit h-fit transition-colors active:scale-90" class:stick-btn-on={isStick()}>
+      <div
+        class="fixed bottom-5 left-5 rounded-md hover:bg-slate/10 w-fit h-fit transition-colors active:scale-90"
+        class:stick-btn-on={isStick()}
+      >
         <div>
-          <button class="p-2.5 text-base" title="stick to bottom" type="button" onClick={() => setStick(!isStick())}>
+          <button
+            class="p-2.5 text-base"
+            title="stick to bottom"
+            type="button"
+            onClick={() => setStick(!isStick())}
+          >
             <div i-ph-arrow-line-down-bold />
           </button>
         </div>
