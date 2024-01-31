@@ -126,6 +126,7 @@ export default () => {
         }),
         signal: controller.signal,
       })
+
       if (!response.ok) {
         const error = await response.json()
         console.error(error.error)
@@ -141,15 +142,26 @@ export default () => {
 
       while (!done) {
         const { value, done: readerDone } = await reader.read()
+
+        if (controller.signal.aborted) {
+          done = true
+          reader.cancel()
+          continue
+        }
+
         if (value) {
           const char = decoder.decode(value)
           if (char === '\n' && currentAssistantMessage().endsWith('\n')) continue
-
-          if (char)
-            for (const idx in char as any) await smooth(char[idx])
+          if (char) {
+            for (const idx in char as any) {
+              if (controller.signal.aborted) break
+              await smooth(char[idx])
+            }
+          }
 
           isStick() && instantToBottom()
         }
+
         done = readerDone
       }
     } catch (e) {
@@ -235,14 +247,14 @@ export default () => {
       {currentError() && <ErrorMessageItem data={currentError()} onRetry={retryLastFetch} />}
       <Show
         when={!loading()}
-        fallback={() => (
+        fallback={
           <div class="gen-cb-wrapper">
             <span>AI is thinking...</span>
             <div class="gen-cb-stop" onClick={stopStreamFetch}>
               Stop
             </div>
           </div>
-        )}
+        }
       >
         <div class="gen-text-wrapper" class:op-50={systemRoleEditing()}>
           <textarea
