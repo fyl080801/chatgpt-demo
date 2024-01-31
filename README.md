@@ -2,6 +2,17 @@
 
 English | [简体中文](./README.zh-CN.md)
 
+## Features
+
+Regarding the changes:
+
+- Fixed a problem where typing effects got lost after deploying with Cloudflare
+- Made typing effects smoother
+
+**🍿 Online Preview**: https://coze.fyl080801.top
+
+## Getting Start
+
 A demo repo based on [OpenAI GPT-3.5 Turbo API.](https://platform.openai.com/docs/guides/chat)
 
 **🍿 Live preview**: https://chatgpt.ddiu.me
@@ -21,6 +32,7 @@ More info on https://github.com/ddiu8081/chatgpt-demo/discussions/247.
 ## Running Locally
 
 ### Pre environment
+
 1. **Node**: Check that both your development environment and deployment environment are using `Node v18` or later. You can use [nvm](https://github.com/nvm-sh/nvm) to manage multiple `node` versions locally.
    ```bash
     node -v
@@ -52,8 +64,6 @@ More info on https://github.com/ddiu8081/chatgpt-demo/discussions/247.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fddiu8081%2Fchatgpt-demo&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys)
 
-
-
 > #### 🔒 Need website password?
 >
 > Deploy with the [`SITE_PASSWORD`](#environment-variables)
@@ -61,7 +71,6 @@ More info on https://github.com/ddiu8081/chatgpt-demo/discussions/247.
 > <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fddiu8081%2Fchatgpt-demo&env=OPENAI_API_KEY&env=SITE_PASSWORD&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys" alt="Deploy with Vercel" target="_blank"><img src="https://vercel.com/button" alt="Deploy with Vercel" height=24 style="vertical-align: middle; margin-right: 4px;"></a>
 
 ![image](https://cdn.jsdelivr.net/gh/yzh990918/static@master/20230310/image.4wzfb79qt7k0.webp)
-
 
 ### Deploy With Netlify
 
@@ -75,7 +84,6 @@ More info on https://github.com/ddiu8081/chatgpt-demo/discussions/247.
 
 ![image](https://cdn.jsdelivr.net/gh/yzh990918/static@master/20230310/image.5fhfouap270g.webp)
 
-
 2. Select the branch you want to deploy, then configure environment variables in the project settings.
 
 ![image](https://cdn.jsdelivr.net/gh/yzh990918/static@master/20230311/image.gfs9lx8c854.webp)
@@ -84,19 +92,20 @@ More info on https://github.com/ddiu8081/chatgpt-demo/discussions/247.
 
 ![image](https://cdn.jsdelivr.net/gh/yzh990918/static@master/20230311/image.4jky9e1wbojk.webp)
 
-
 ### Deploy with Docker
 
 Environment variables refer to the documentation below. [Docker Hub address](https://hub.docker.com/r/ddiu8081/chatgpt-demo).
 
 **Direct run**
+
 ```bash
 docker run --name=chatgpt-demo -e OPENAI_API_KEY=YOUR_OPEN_API_KEY -p 3000:3000 -d ddiu8081/chatgpt-demo:latest
 ```
+
 `-e` define environment variables in the container.
 
-
 **Docker compose**
+
 ```yml
 version: '3'
 
@@ -126,9 +135,9 @@ docker-compose down
 
 ### Deploy with Sealos
 
- 1.Register a Sealos account for free [sealos cloud](https://cloud.sealos.io)
+1.Register a Sealos account for free [sealos cloud](https://cloud.sealos.io)
 
-2.Click  `App Launchpad` button
+2.Click `App Launchpad` button
 
 ![App Launchpad](https://cdn.jsdelivr.net/gh/yzh990918/static@master/20230609/install-on-sealos-1.34i8gi80j268.webp)
 
@@ -166,22 +175,21 @@ Please refer to the official deployment documentation: https://docs.astro.build/
 
 You can control the website through environment variables.
 
-| Name | Description | Default |
-| --- | --- | --- |
-| `OPENAI_API_KEY` | Your API Key for OpenAI. | `null` |
-| `HTTPS_PROXY` | Provide proxy for OpenAI API. e.g. `http://127.0.0.1:7890` | `null` |
-| `OPENAI_API_BASE_URL` | Custom base url for OpenAI API. | `https://api.openai.com` |
-| `HEAD_SCRIPTS` | Inject analytics or other scripts before `</head>` of the page | `null` |
-| `PUBLIC_SECRET_KEY` | Secret string for the project. Use for generating signatures for API calls | `null` |
-| `SITE_PASSWORD` | Set password for site, support multiple password separated by comma. If not set, site will be public | `null` |
-| `OPENAI_API_MODEL` | ID of the model to use. [List models](https://platform.openai.com/docs/api-reference/models/list) | `gpt-3.5-turbo` |
+| Name                  | Description                                                                                          | Default                  |
+| --------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------ |
+| `OPENAI_API_KEY`      | Your API Key for OpenAI.                                                                             | `null`                   |
+| `HTTPS_PROXY`         | Provide proxy for OpenAI API. e.g. `http://127.0.0.1:7890`                                           | `null`                   |
+| `OPENAI_API_BASE_URL` | Custom base url for OpenAI API.                                                                      | `https://api.openai.com` |
+| `HEAD_SCRIPTS`        | Inject analytics or other scripts before `</head>` of the page                                       | `null`                   |
+| `PUBLIC_SECRET_KEY`   | Secret string for the project. Use for generating signatures for API calls                           | `null`                   |
+| `SITE_PASSWORD`       | Set password for site, support multiple password separated by comma. If not set, site will be public | `null`                   |
+| `OPENAI_API_MODEL`    | ID of the model to use. [List models](https://platform.openai.com/docs/api-reference/models/list)    | `gpt-3.5-turbo`          |
 
 ## Enable Automatic Updates
 
 After forking the project, you need to manually enable Workflows and Upstream Sync Action on the Actions page of the forked project. Once enabled, automatic updates will be scheduled every day:
 
 ![](https://cdn.jsdelivr.net/gh/yzh990918/static@master/20230518/image.2hhnrsrd2t1c.webp)
-
 
 ## Frequently Asked Questions
 
