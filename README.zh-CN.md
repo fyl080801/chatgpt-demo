@@ -2,6 +2,17 @@
 
 [English](./README.md) | 简体中文
 
+## Features
+
+魔改了一版，主要是:
+
+- 修复cf部署之后打字效果丢失问题
+- 打字效果更顺滑
+
+**🍿 在线预览**: https://coze.fyl080801.top
+
+## Getting Start
+
 一个基于 [OpenAI GPT-3.5 Turbo API](https://platform.openai.com/docs/guides/chat) 的 demo。
 
 **🍿 在线预览**: https://chatgpt.ddiu.me
@@ -47,8 +58,6 @@
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fddiu8081%2Fchatgpt-demo&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys)
 
-
-
 > ###### 🔒 需要站点密码？
 >
 > 携带[`SITE_PASSWORD`](#environment-variables)进行部署
@@ -69,7 +78,6 @@
 
 ![image](https://cdn.jsdelivr.net/gh/yzh990918/static@master/20230310/image.5fhfouap270g.webp)
 
-
 2. 选择要部署的分支，选择 `main` 分支，在项目设置中配置环境变量，环境变量配置参考下文。
 
 ![image](https://cdn.jsdelivr.net/gh/yzh990918/static@master/20230310/image.6dvtfmoijb7k.webp)
@@ -79,15 +87,19 @@
 ![image](https://cdn.jsdelivr.net/gh/yzh990918/static@master/20230310/image.e0n7c0zaen4.webp)
 
 ### 部署在 Docker
+
 部署之前请确认 `.env` 文件正常配置，环境变量参考下方文档，[Docker Hub address](https://hub.docker.com/r/ddiu8081/chatgpt-demo).
 
 **一键运行**
+
 ```bash
 docker run --name=chatgpt-demo -e OPENAI_API_KEY=YOUR_OPEN_API_KEY -p 3000:3000 -d ddiu8081/chatgpt-demo:latest
 ```
+
 `-e` 在容器中定义环境变量。
 
 **使用 Docker compose**
+
 ```yml
 version: '3'
 
@@ -117,9 +129,9 @@ docker-compose down
 
 ### Sealos 部署
 
- 1.注册 Sealos 免费账号 [sealos cloud](https://cloud.sealos.io)
+1.注册 Sealos 免费账号 [sealos cloud](https://cloud.sealos.io)
 
-2.点击  `App Launchpad` 按钮
+2.点击 `App Launchpad` 按钮
 
 ![App Launchpad](https://cdn.jsdelivr.net/gh/yzh990918/static@master/20230609/install-on-sealos-1.34i8gi80j268.webp)
 
@@ -157,15 +169,15 @@ Environment: OPENAI_API_KEY=YOUR_OPEN_API_KEY
 
 配置本地或者部署的环境变量
 
-| 名称 | 描述 | 默认 |
-| --- | --- | --- |
-| `OPENAI_API_KEY` | 你的 OpenAI API Key | `null` |
-| `HTTPS_PROXY` | 为 OpenAI API 提供代理。e.g. `http://127.0.0.1:7890` | `null` |
-| `OPENAI_API_BASE_URL` | 请求 OpenAI API 的自定义 Base URL. | `https://api.openai.com` |
-| `HEAD_SCRIPTS` | 在页面的 `</head>` 之前注入分析或其他脚本 | `null` |
-| `PUBLIC_SECRET_KEY` | 项目的秘密字符串。用于生成 API 调用的签名 | `null` |
-| `SITE_PASSWORD` | 为网站设置密码，支持使用英文逗号创建多个密码。如果未设置，则该网站将是公开的 | `null` |
-| `OPENAI_API_MODEL` | 使用的 OpenAI 模型。[模型列表](https://platform.openai.com/docs/api-reference/models/list) | `gpt-3.5-turbo` |
+| 名称                  | 描述                                                                                       | 默认                     |
+| --------------------- | ------------------------------------------------------------------------------------------ | ------------------------ |
+| `OPENAI_API_KEY`      | 你的 OpenAI API Key                                                                        | `null`                   |
+| `HTTPS_PROXY`         | 为 OpenAI API 提供代理。e.g. `http://127.0.0.1:7890`                                       | `null`                   |
+| `OPENAI_API_BASE_URL` | 请求 OpenAI API 的自定义 Base URL.                                                         | `https://api.openai.com` |
+| `HEAD_SCRIPTS`        | 在页面的 `</head>` 之前注入分析或其他脚本                                                  | `null`                   |
+| `PUBLIC_SECRET_KEY`   | 项目的秘密字符串。用于生成 API 调用的签名                                                  | `null`                   |
+| `SITE_PASSWORD`       | 为网站设置密码，支持使用英文逗号创建多个密码。如果未设置，则该网站将是公开的               | `null`                   |
+| `OPENAI_API_MODEL`    | 使用的 OpenAI 模型。[模型列表](https://platform.openai.com/docs/api-reference/models/list) | `gpt-3.5-turbo`          |
 
 ## 开启同步更新
 
